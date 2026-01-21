@@ -1,0 +1,84 @@
+services:
+  # Galatasaray Football Management System API
+  galatasaray-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: galatasaray-management-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Database Configuration - Local PostgreSQL
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=galatasaray_db;Username=postgres;Password=postgres;
+      
+      # ASP.NET Core Configuration
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_HTTP_PORTS=8080
+      
+      # Disable host filtering
+      - ASPNETCORE_HOSTFILTERING__ALLOWEDHOSTS=*
+      
+      # Logging Configuration
+      - Logging__LogLevel__Default=${LOG_LEVEL:-Information}
+      - Logging__LogLevel__Microsoft.AspNetCore=${ASPNET_LOG_LEVEL:-Warning}
+      
+      # Application Configuration
+      - AllowedHosts=*
+      
+    volumes:
+      # Optional: Mount logs directory for persistent logging
+      - ./logs:/app/logs
+    
+    networks:
+      - galatasaray-network
+    
+    restart: unless-stopped
+    
+    depends_on:
+      - postgres
+    
+    # Health check configuration
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+  # Local PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: galatasaray-postgres
+    environment:
+      - POSTGRES_DB=galatasaray_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - galatasaray-network
+    restart: unless-stopped
+
+networks:
+  galatasaray-network:
+    driver: bridge
+    name: galatasaray-network
+
+volumes:
+  postgres_data:
+    driver: local
+  logs:
+    driver: local

@@ -1,0 +1,1 @@
+# Galatasaray-Management-System

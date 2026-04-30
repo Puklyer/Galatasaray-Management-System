@@ -1,4 +1,9 @@
 # 🔴🟡 Galatasaray Football Management System 🟡🔴
+<img width="1919" height="413" alt="Ekran görüntüsü 2026-04-30 180520" src="https://github.com/user-attachments/assets/654f988f-da64-4828-925b-5d09860e14a4" />
+<img width="1919" height="1079" alt="Ekran görüntüsü 2026-04-30 180510" src="https://github.com/user-attachments/assets/b642d754-af22-4f03-a246-c94535e9325e" />
+<img width="1919" height="1079" alt="Ekran görüntüsü 2026-04-30 180449" src="https://github.com/user-attachments/assets/47060ad0-f362-419b-b7b1-407b110d8250" />
+
+
 
 A comprehensive football management system built with .NET 8, featuring a responsive web interface and RESTful API for managing Galatasaray players, matches, and statistics.
 
